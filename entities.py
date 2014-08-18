@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame
+from random import randint
 
 class EntityObj(object):
 
@@ -46,7 +47,7 @@ class ScreenHUD(PhysicalObj):
         self.update()
         #pygame.draw.rect(self.screen, self.colour, self.hud_rect, 2)
         pygame.draw.rect(self.screen, self.colour, self.wall_top, 2)
-        pygame.draw.rect(self.screen, self.colour, self.wall_bottom, 2)
+        pygame.draw.rect(self.screen, (0,0,0), self.wall_bottom, 2)
         pygame.draw.rect(self.screen, self.colour, self.wall_left, 2)
         pygame.draw.rect(self.screen, self.colour, self.wall_right, 2)
 
@@ -77,47 +78,46 @@ class NPCBall(PhysicalObj):
         self.screen = screen
         self.colour = c
         self.ball_rect = pygame.Rect(self.x, self.y,self.height,self.width)
+        self.rand = randint(-2,2)
+        self.mx = self.x
+        self.xspeed = 1
+        self.yspeed = 0
 
     def move(self, mx, my, d, player,screen_hud):
         if self.can_move:
-            self.direction = d
+            self.y += self.xspeed
+            self.x += self.yspeed
 
-            if self.direction:
-                    self.y += 2
-                    self.rect[1] += 2
-
-            elif not self.direction:
-                    self.y -= 2
-                    self.rect[1] -= 2
+            # print 'ball speed is', self.xspeed, self.yspeed
 
             if self.rect.colliderect(player.player_rect):
-                print 'ball collided with player'
-                self.direction = not self.direction
-                return self.direction
+                #print 'ball collided with player at', self.x, self.y
+                self.xspeed *= -self.xspeed
+                rand = randint(-1,1)
+                self.yspeed = rand
+                #print 'rebounding to', self.x, self.y
 
             if self.rect.colliderect(screen_hud.wall_top):
-                print 'ball collided with top wall'
-                self.direction = not self.direction
-                return self.direction
+                #print 'ball collided with top wall'
+                self.xspeed *= self.xspeed
+                self.yspeed *= -self.yspeed
 
             if self.rect.colliderect(screen_hud.wall_left):
-                print 'ball collided with left wall'
-                self.direction = not self.direction
-                return self.direction
+                #print 'ball collided with left wall'
+                self.xspeed *= self.xspeed
+                self.yspeed *= self.yspeed
 
             if self.rect.colliderect(screen_hud.wall_right):
-                print 'ball collided with right wall'
-                self.direction = not self.direction
-                return self.direction
-
+                #print 'ball collided with right wall'
+                self.xspeed *= -self.xspeed
+                self.yspeed *= -self.yspeed
 
             if self.rect.colliderect(screen_hud.wall_bottom):
                 print 'game over'
-                self.direction = self.direction
-                return self.direction
 
-
-
+        self.rect[0] = self.x
+        self.rect[1] = self.y
+        self.draw()
 
     def update(self):
         self.ball_rect = pygame.Rect(self.x, self.y,self.height,self.width)

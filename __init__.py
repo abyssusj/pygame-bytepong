@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
 '''
-Project: Byte Invaders
-Concept: Pong game with a twist
+Project: Byte Pong
+Concept: Pong game
 
 Author: abyssus dot <nospamkkty> j at gmail dot com
 
-Status: incomplete
-Todo: just about everything
+Status: in progress
+Todo: lots of things
 
 USEFUL INFO
 
@@ -45,6 +45,13 @@ class GetColours:
         self.black = (0,0,0)
         self.pink = (255,200,200)
 
+
+
+class GameState:
+
+    def __init__(self):
+        self.playing = True
+
 if __name__ == "__main__":
 
     pygame.init()
@@ -52,13 +59,11 @@ if __name__ == "__main__":
     # lets create the game window
     screenwh = [432, 423] # sets game screens dimensions
     os.environ['SDL_VIDEO_CENTERED'] = '1'  # makes screen open in middle
-    pygame.display.set_caption('Byte me') # sets title of screen
+    pygame.display.set_caption('Byte Pong') # sets title of screen
     screen = pygame.display.set_mode((screenwh[0], screenwh[1]))
     screenwh_x_mid = screenwh[0] / 2
     screenwh_y_mid = screenwh[1] / 2
     colours = GetColours()
-
-    all_objects = []
 
     clock = pygame.time.Clock()
 
@@ -71,7 +76,7 @@ if __name__ == "__main__":
     # is the game running?
     game_on = True
 
-while game_on is True:
+while game_on:
 
     # check for quit events
     for event in pygame.event.get():
@@ -82,19 +87,17 @@ while game_on is True:
 
     if keys[pygame.K_LEFT]:
         player.move(-2)
-        for o in all_objects:
-            print o
 
     elif keys[pygame.K_RIGHT]:
         player.move(2)
 
+
     # game speed
-    msElapsed = clock.tick(60)
+    msElapsed = clock.tick(240)
     screen.fill(colours.black)
 
     screen_hud.draw()
     player.draw()
-    ball.draw()
-    ball.move(0, -1, ball.direction, player,screen_hud)
-
+    ball.move(ball.x, ball.y, ball.direction, player,screen_hud)
+    ball.update()
     pygame.display.update()
