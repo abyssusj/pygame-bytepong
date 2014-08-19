@@ -86,10 +86,12 @@ while game_on:
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_LEFT]:
-        player.move(-2)
+        if player.x >= 4:
+            player.move(-2)
 
     elif keys[pygame.K_RIGHT]:
-        player.move(2)
+        if player.x <= screenwh[1]-(player.width+27):
+            player.move(2)
 
 
     # game speed
