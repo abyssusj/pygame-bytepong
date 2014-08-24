@@ -127,7 +127,7 @@ while game_on:
 
 
         if keys[pygame.K_SPACE]:
-            ball = NPCBall(screen, screenwh_x_mid-10, 50, 10, 0,colours.green)
+            ball = NPCBall(screen, screenwh_x_mid-10, 50, 10, 0,colours.green,sfx)
             ball.direction = True
             player.state = 'play'
 
