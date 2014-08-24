@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame
 from random import randint
+from random import uniform
 
 class EntityObj(object):
 
@@ -75,15 +76,16 @@ class Player(PhysicalObj):
 
 class NPCBall(PhysicalObj):
     '''Creates a moveable player object and draws to screen'''
-    def __init__(self, screen,x,y,h,w,c):
+    def __init__(self, screen,x,y,h,w,c,s):
         super(NPCBall, self).__init__(x,y,h,w)
         self.screen = screen
         self.colour = c
         self.ball_rect = pygame.Rect(self.x, self.y,self.height,self.width)
-        self.rand = randint(-2,2)
+        rand = str(uniform(-3.0, 3.0))
         self.mx = self.x
         self.xspeed = 1
         self.yspeed = 0
+        self.sfx1 = s[0]
 
     def move(self, mx, my, d, player,screen_hud):
         if self.can_move:
@@ -97,22 +99,26 @@ class NPCBall(PhysicalObj):
                 self.xspeed *= -self.xspeed
                 rand = randint(-1,1)
                 self.yspeed = rand
+                self.sfx1.play(1)
                 #print 'rebounding to', self.x, self.y
 
             if self.rect.colliderect(screen_hud.wall_top):
                 #print 'ball collided with top wall'
                 self.xspeed *= self.xspeed
                 self.yspeed *= -self.yspeed
+                self.sfx1.play(1)
 
             if self.rect.colliderect(screen_hud.wall_left):
                 #print 'ball collided with left wall'
                 self.xspeed *= self.xspeed
                 self.yspeed *= self.yspeed
+                self.sfx1.play(1)
 
             if self.rect.colliderect(screen_hud.wall_right):
                 #print 'ball collided with right wall'
                 self.xspeed *= -self.xspeed
                 self.yspeed *= -self.yspeed
+                self.sfx1.play(1)
 
             if self.rect.colliderect(screen_hud.wall_bottom):
                 player.state = 'game_over'

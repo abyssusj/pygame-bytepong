@@ -30,6 +30,7 @@ import random
 from entities import *
 
 
+
 class GetColours:
 
     def __init__(self):
@@ -53,8 +54,15 @@ class GameState:
         self.playing = True
 
 if __name__ == "__main__":
-
+    pygame.mixer.pre_init(44100, -16, 2, 4096)
     pygame.init()
+
+    sfx_plop = pygame.mixer.Sound(os.path.join('assets/sounds/plop.ogg'))  #load sound
+    sfx_beep = pygame.mixer.Sound(os.path.join('assets/sounds/beep.ogg'))  #load sound
+    pygame.mixer.music.load(os.path.join('assets/sounds/nuttypc2.ogg') )#load music
+    pygame.mixer.music.play(-1)
+
+    sfx = [sfx_plop, sfx_beep]
 
     # lets create the game window
     screenwh = [432, 423] # sets game screens dimensions
@@ -71,7 +79,7 @@ if __name__ == "__main__":
 
     player = Player(screen, screenwh_x_mid-20,screenwh[1]-20,40,10,colours.blue)
 
-    ball = NPCBall(screen, screenwh_x_mid-10, 50, 10, 0,colours.green)
+    ball = NPCBall(screen, screenwh_x_mid-10, 50, 10, 0,colours.green,sfx)
     ball.direction = True
 
     font=pygame.font.Font('assets/fonts/ArcadeClassic.ttf',30)
