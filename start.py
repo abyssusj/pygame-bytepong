@@ -73,33 +73,75 @@ if __name__ == "__main__":
 
     ball = NPCBall(screen, screenwh_x_mid-10, 50, 10, 0,colours.green)
     ball.direction = True
+
+    font=pygame.font.Font('assets/fonts/ArcadeClassic.ttf',30)
+
     # is the game running?
     game_on = True
+
 
 while game_on:
 
     # check for quit events
     for event in pygame.event.get():
+        keys = pygame.key.get_pressed()
+
         if event.type == pygame.QUIT:
               pygame.quit(); sys.exit();
 
-    keys = pygame.key.get_pressed()
+    if player.state is 'menu':
 
-    if keys[pygame.K_LEFT]:
-        if player.x >= 4:
-            player.move(-2)
+        screen.fill(colours.black)
+        screen.fill(colours.black)
+        txt1 = 'Byte Pong'
+        txt2 = 'Press    SPACE    to  start'
+        menutxt1 = font.render(txt1, 1, colours.green)
+        menutxt2 = font.render(txt2, 1, colours.green)
+        screen.blit(menutxt1, (screenwh[0]/3, screenwh[1]/3))
+        screen.blit(menutxt2, (screenwh[0]/8, screenwh[1]/2))
+        pygame.display.update()
 
-    elif keys[pygame.K_RIGHT]:
-        if player.x <= screenwh[1]-(player.width+27):
-            player.move(2)
+
+        if keys[pygame.K_SPACE]:
+            player.state = 'play'
 
 
-    # game speed
-    msElapsed = clock.tick(240)
-    screen.fill(colours.black)
 
-    screen_hud.draw()
-    player.draw()
-    ball.move(ball.x, ball.y, ball.direction, player,screen_hud)
-    ball.update()
+    if player.state is 'game_over':
+        screen.fill(colours.black)
+        txt1 = 'Game   Over'
+        txt2 = 'Press    SPACE    to  start'
+        menutxt1 = font.render(txt1, 1, colours.green)
+        menutxt2 = font.render(txt2, 1, colours.green)
+        screen.blit(menutxt1, (screenwh[0]/3, screenwh[1]/3))
+        screen.blit(menutxt2, (screenwh[0]/8, screenwh[1]/2))
+        pygame.display.update()
+
+
+        if keys[pygame.K_SPACE]:
+            ball = NPCBall(screen, screenwh_x_mid-10, 50, 10, 0,colours.green)
+            ball.direction = True
+            player.state = 'play'
+
+
+    if player.state is 'play':
+        if keys[pygame.K_LEFT]:
+            if player.x >= 4:
+                player.move(-2)
+
+        elif keys[pygame.K_RIGHT]:
+            if player.x <= screenwh[1]-(player.width+27):
+                player.move(2)
+
+
+        # game speed
+        msElapsed = clock.tick(240)
+        screen.fill(colours.black)
+
+        screen_hud.draw()
+        player.draw()
+        ball.move(ball.x, ball.y, ball.direction, player,screen_hud)
+        ball.update()
+
     pygame.display.update()
+

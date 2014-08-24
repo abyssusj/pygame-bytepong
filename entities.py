@@ -58,6 +58,8 @@ class Player(PhysicalObj):
         self.screen = screen
         self.colour = c
         self.player_rect = (self.x, self.y,self.height,self.width)
+        self.state = 'menu'
+
 
     def move(self, mx):
         if self.can_move:
@@ -113,7 +115,7 @@ class NPCBall(PhysicalObj):
                 self.yspeed *= -self.yspeed
 
             if self.rect.colliderect(screen_hud.wall_bottom):
-                print 'game over'
+                player.state = 'game_over'
 
         self.rect[0] = self.x
         self.rect[1] = self.y
